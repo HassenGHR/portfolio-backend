@@ -1,20 +1,19 @@
-// server.js
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors"); 
+require('dotenv').config();
+
 const app = express();
 const PORT = 5002;
 
 app.use(bodyParser.json());
-app.use(cors()); // Use cors middleware to enable CORS
+app.use(cors()); 
 
 
-// Connect to MongoDB
-mongoose.connect("mongodb+srv://Hassen:siV9VBKwMgdIZ4iv@cluster0.qft15hl.mongodb.net/portfolio?retryWrites=true&w=majority");
+mongoose.connect(process.env.MONGODB_URI);
 
 
-// Define a schema for your data
 const formDataSchema = new mongoose.Schema({
   name: String,
   email: String,
@@ -24,7 +23,6 @@ const formDataSchema = new mongoose.Schema({
 // Create a model
 const FormData = mongoose.model("FormData", formDataSchema);
 
-// Handle form submission
 app.post("/submit-form", async (req, res) => {
   try {
     const { name, email, message } = req.body;
@@ -47,5 +45,5 @@ app.post("/submit-form", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on ${PORT}`);
 });
